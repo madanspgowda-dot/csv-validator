@@ -14,7 +14,6 @@ DISPLAY_COLUMNS = [
     "COURSE_NAME",
     "YEAR",
     "CSV_MONTH",
-    
     "SEM",
     "REGN_NO"
 ]
@@ -38,13 +37,13 @@ def upload():
         # Read uploaded CSV
         df_original = pd.read_csv(file, dtype=str)
 
-        # Display only required columns if they exist
+        # Display only selected columns
         available_display_columns = [
             col for col in DISPLAY_COLUMNS
             if col in df_original.columns
         ]
 
-        if len(available_display_columns) == 0:
+        if not available_display_columns:
             return "Required display columns not found in CSV."
 
         df_display = df_original[available_display_columns]
@@ -70,10 +69,10 @@ def save():
 
     selected_indices = [int(i) for i in selected_rows]
 
-    # Selected records from original CSV
+    # Selected records
     selected_df = df_original.iloc[selected_indices]
 
-    # Fixed columns to save
+    # Fixed columns
     base_columns = [
         "INVALID_COLUMNS",
         "ACADEMIC_COURSE_ID",
@@ -94,28 +93,24 @@ def save():
         "TOT_MRKS"
     ]
 
-    # Automatically include all subject columns
+    # Include all SUB columns automatically
     sub_columns = [
         col for col in selected_df.columns
         if col.startswith("SUB")
     ]
 
-    # Combine columns
     save_columns = []
 
     for col in base_columns + sub_columns:
         if col in selected_df.columns:
             save_columns.append(col)
 
-    # Keep only required columns
     selected_df = selected_df[save_columns]
 
-    # Output Excel file
+    # Output file
     output_file = "save_the_record.xlsx"
 
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-    # Append data if file exists
+    # Append if already exists
     if os.path.exists(output_file):
         try:
             existing_df = pd.read_excel(
@@ -148,7 +143,7 @@ def save():
         <title>Saved Successfully</title>
     </head>
     <body style="font-family:Arial;text-align:center;padding-top:50px;">
-    
+
         <h2 style="color:green;">
             Records Saved Successfully
         </h2>
@@ -174,6 +169,7 @@ def save():
     </body>
     </html>
     """
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
