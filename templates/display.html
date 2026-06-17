@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Records</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            padding:30px;
+        }
+
+        .container{
+            background:white;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.15);
+            max-width:95%;
+            margin:auto;
+        }
+
+        h2{
+            text-align:center;
+            color:#333;
+            margin-bottom:20px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th{
+            background:#007bff;
+            color:white;
+            padding:12px;
+            text-align:center;
+        }
+
+        td{
+            padding:10px;
+            text-align:center;
+            border:1px solid #ddd;
+        }
+
+        tr:nth-child(even){
+            background:#f8f9fa;
+        }
+
+        tr:hover{
+            background:#e9f3ff;
+        }
+
+        input[type="checkbox"]{
+            transform:scale(1.3);
+            cursor:pointer;
+        }
+
+        .btn{
+            display:block;
+            margin:25px auto 0;
+            background:#28a745;
+            color:white;
+            border:none;
+            padding:12px 25px;
+            border-radius:6px;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            background:#218838;
+        }
+
+        .record-count{
+            text-align:center;
+            color:#666;
+            margin-top:10px;
+            margin-bottom:15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Select Records to Save</h2>
+
+    <div class="record-count">
+        Total Records: {{ data|length }}
+    </div>
+
+    <form action="/save" method="post">
+
+        <table>
+
+            <tr>
+                <th>Select</th>
+
+                {% for col in columns %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+
+            {% for row in data %}
+            <tr>
+
+                <td>
+                    <input type="checkbox"
+                           name="row"
+                           value="{{ loop.index0 }}">
+                </td>
+
+                {% for col in columns %}
+                    <td>{{ row[col] }}</td>
+                {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <button type="submit" class="btn">
+            Save Selected Records
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
